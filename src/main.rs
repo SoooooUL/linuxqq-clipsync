@@ -375,11 +375,19 @@ fn main() {
 
         let target_t = sync_mime;
 
-        if write_clipboard(
-            "xclip",
-            &["-sel", "clip", "-i", "-t", target_t],
-            &write_data,
-        ) {
+        // if write_clipboard(
+        //     "xclip",
+        //     &["-sel", "clip", "-i", "-t", target_t],
+        //     &write_data,
+        // ) {
+        //     state.last_sync_hash = current_hash;
+        // }
+        let write_ok = if process_mode == "text" {
+            write_clipboard("xsel", &["--clipboard", "--input"], &write_data)
+        } else {
+            write_clipboard("xclip", &["-sel", "clip", "-i", "-t", target_t], &write_data)
+        };
+        if write_ok {
             state.last_sync_hash = current_hash;
         }
     }
